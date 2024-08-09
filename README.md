@@ -1,5 +1,5 @@
 # About
-This is a lexer/tokenizer for the C programming language. It takes a C file as an input and produces the following pairs as output:
+This is a lexer/tokenizer for the C programming language. It takes a C file as an input and produces the following (literal, token_type) pairs as output:
 ```
 // example1.c:
     int x = 1.f*0xAB;
