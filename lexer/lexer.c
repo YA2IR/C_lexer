@@ -216,50 +216,41 @@ char* read_ident(lexer* l) {
 char* read_num(lexer* l) {
 
     int pos = l->pos;
-    
-    if(l->ch == '0') {
 
-        if (peek_char(l) == 'x') { //hex
+    if(l->ch != '0') { // decimal
+
+        bool dot_exists = false; 
+        while (is_digit(l->ch)) {
+            read_char(l); 
+            if(l->ch == '.' && !dot_exists) {
+                dot_exists = true;
+                read_char(l);
+            } }
+        // validating suffixes
+        if (is_letter(l->ch)) {
+            
+            if (dot_exists && (l->ch == 'f' || l->ch == 'l'))  // allow 1.0l and 1.0f
+                    read_char(l);
+            else { // allow 1l, 1ull and such.. currently, they are only lowercase.
+                char allowed_suff[] = "ull"; 
+                for (int i = 0; i < 3; i++) 
+                    if (l->ch == allowed_suff[i]) 
+                        read_char(l);
+            } 
+        } 
+
+    } else if (peek_char(l) == 'x') { //hex
         	read_char(l);
         	read_char(l);
-
         	while(isxdigit(l->ch)) 
             	read_char(l);
-        
     } else { // oct
         while('0' <= l->ch && l->ch <= '7')
             read_char(l);
         if(is_digit(l->ch)) // 8,9 ..
             return NULL;
     }
-    
-    } else { // decimal
-        
-    bool dot_exists = false;
-    while (is_digit(l->ch)) {
-        read_char(l); 
-        if(l->ch == '.' && !dot_exists) {
-            dot_exists = true;
-            read_char(l);
-        }
-	}
-     
 
-    // validating suffixes
-    if (is_letter(l->ch)) {
-        
-        if (dot_exists && (l->ch == 'f' || l->ch == 'l'))  // allow 1.0l and 1.0f
-                read_char(l);
-        else { // allow 1l, 1ull and such..
-            char allowed_suff[] = "ull"; 
-            for (int i = 0; i < 3; i++) 
-                if (l->ch == allowed_suff[i]) 
-                    read_char(l);
-        }
-    }
-
-}
-    
     if (is_letter(l->ch)) 
         return NULL;
 
@@ -431,7 +422,6 @@ token_t ident_or_keyword(char* literal){
 }
 
 bool is_letter(char ch){
-    //return ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || (ch == '_');
     return isalpha((unsigned char)ch) || (ch == '_');
 }
 

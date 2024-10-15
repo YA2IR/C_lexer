@@ -13,8 +13,13 @@ This is a lexer/tokenizer for the C programming language. It takes a C file as a
     == (';','SEMICOLON')
     == --END-- ==
 ```
-For a full example, you can run it on example.c.
+
+For a full example, you can run it on example.c -an actual file-:
+```
+gcc main.c lexer/lexer.c && ./a.out example.c
+```
 
 # Limitations
-- The lexer supports most but not all of the language. For example, it doesn't support the scientific notation "123.45e-6" (yet), and I might have missed things like supporting suffixes in hexadecimal literals (i.e. "0xA(L)" is not allowed)
+- The lexer supports most but not all of the language. For example, it doesn't support the scientific notation "123.45e-6" yet, and I might have missed things like supporting suffixes in hexadecimal literals (i.e. "0xA(L)" is not allowed)
+- There is only one token type that represents numbers "NUM"
 - It doesn't support directives that are handled by the preprocessor (e.g. #define and #include)

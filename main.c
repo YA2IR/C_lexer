@@ -55,6 +55,9 @@ void lex_file(char*name) {
         printf("\n== ('%s','%s')", t.literal, enum_str[t.type]);
         free(t.literal);
     }
+	if(t.type == t_EOF) {
+		free(t.literal);
+	}
 
     free(l);
     free(buff);
